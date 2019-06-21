@@ -17,7 +17,7 @@ public class AutoAddNamespace : UnityEditor.AssetModificationProcessor {
 
     private static string getClassName(string text)
     {
-        string pattern = @"public class ([a-zA-Z0-9_]+)\s*:\s* MonoBehaviour";
+        string pattern = @"public class (\w+)\s*:\s* MonoBehaviour";
         Regex regex = new Regex(pattern);
         var match = regex.Match(text);
         if(match.Success)
