@@ -10,58 +10,45 @@ namespace CustomTool
 
         private static void OnWillCreateAsset(string path)
         {
-            path = path.Replace(".meta", "");
-            if (path.EndsWith(".cs"))
+            path = path.Replace(".meta", ""); //path是资源的meta文件路径
+            if (path.EndsWith(".cs"))  //判断是否是创建的脚本文件.cs
             {
                 StringBuilder stringBuilder = new StringBuilder();
                 using (StreamReader sr = new StreamReader(path))
                 {
-                    while(true)
-                    {
-                        string line = sr.ReadLine();
-                        if(line == null)
-                        {
-                            break;
-                        }
-                        stringBuilder.AppendLine(line);
-                    }
-                    sr.Close();
-                    sr.Dispose();
+                    string text = sr.ReadToEnd();
+                    stringBuilder.Append(text);
                 }
-                var newText = GetScriptContext(getClassName(stringBuilder.ToString()));
                 
                 using (StreamWriter sw = new StreamWriter(path))
                 {
-                    sw.WriteLine(stringBuilder.ToString());
-                    sw.Close();
-                    sw.Dispose();
+                    var newText = GetScriptContext(GetClassName(stringBuilder.ToString()));
+                    sw.Write(newText);
                 }
             }
         }
 
+        //更新脚本内容为新的类名 
         private static string GetScriptContext(string className)
         {
             var script = new ScriptBuildHelper();
-            script.indentTimes = 0;
             script.WriteUsing("UnityEngine");
-            script.WriteLine("", false);
+            script.WriteLine("");
             script.WriteNamespace("UIFrame");
-            script.indentTimes ++;
-            script.WriteClass(className);
-            script.indentTimes ++;
-            script.WriteFunction("Start");
-            //script.WriteFunction("Update");
+            script.WriteClass(className, 1);
+            script.WriteFunction("Start", 2);
+            script.WriteFunction("Update",2, "float delta", "bool isUpdate");
             return script.toString();
         }
 
-        private static string getClassName(string text)
+        //获取类名
+        private static string GetClassName(string text)
         {
             string pattern = @"public class (\w+)\s*:\s* MonoBehaviour";
-            Regex regex = new Regex(pattern);
-            var match = regex.Match(text);
+            var match = Regex.Match(text, pattern);
             if (match.Success)
             {
-                return match.Groups[1].Value;  //Groups[0]为匹配的整体，Groups[1]为匹配到的子项
+                return match.Groups[1].Value;  //Groups[0]为匹配的整体，Groups[1]为匹配到的子项,即小括号内的内容
             }
             return "";
         }
