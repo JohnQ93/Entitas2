@@ -37,7 +37,7 @@ namespace CustomTool
             script.WriteNamespace("UIFrame");
             script.WriteClass(className, 1);
             script.WriteFunction("Start", 2);
-            script.WriteFunction("Update",2, "float delta", "bool isUpdate");
+            //script.WriteFunction("Update",2, "float delta", "bool isUpdate");
             return script.toString();
         }
 
