@@ -46,18 +46,16 @@ namespace UIFrame
 
         protected virtual void Init()
         {
-            uiState = UIState.INIT;
+            
         }
 
         protected virtual void Show()
         {
-            uiState = UIState.SHOW;
             SetActive(true);
         }
 
         protected virtual void Hide()
         {
-            uiState = UIState.HIDE;
             SetActive(false);
         }
 
@@ -66,6 +64,6 @@ namespace UIFrame
             gameObject.SetActive(active);
         }
 
-        public abstract UIState GetUiId();
+        public abstract UiId GetUiId();
     }
 }
