@@ -10,93 +10,93 @@ namespace UIFrame
     {
         private readonly Dictionary<UiId, GameObject> _prefabDictionary = new Dictionary<UiId, GameObject>();
         private readonly Stack<UIBase> _uiStack = new Stack<UIBase>();
-        private UILayerManager _layerManager;
+        private Func<UILayer, Transform> GetLayerObject;
 
-        private void Awake()
-        {
-            _layerManager = GetComponent<UILayerManager>();
-            if(_layerManager == null)
-            {
-                Debug.LogError("can not find UILayerManager");
-            }
-        }
-
-        private async void Start()
-        {
-            Show(UiId.MainMenu);
-
-            await Task.Delay(TimeSpan.FromSeconds(1));
-
-            Show(UiId.StartGame);
-
-            await Task.Delay(TimeSpan.FromSeconds(1));
-
-            Back();
-        }
-
-        public void Show(UiId id)
+        public Tuple<Transform, Transform> Show(UiId id)
         {
             GameObject ui = GetPrefabObject(id);
             if (ui == null)
             {
                 Debug.LogError("can not find prefab " + id.ToString());
-                return;
+                return null;
             }
 
             UIBase uiScript = GetUiScript(ui, id);
             if (uiScript == null)
-                return;
+                return null;
 
+            // 初始化UI对应的父物体
             InitUi(uiScript);
 
+            Transform hideUI = null;
             if (uiScript.Layer == UILayer.BASIC_UI)
             {
                 uiScript.uiState = UIState.SHOW;
-                Hide();
+                hideUI = Hide();
             }
             else
             {
                 uiScript.uiState = UIState.SHOW;
             }
-
+            
             _uiStack.Push(uiScript);
+
+            return new Tuple<Transform, Transform>(ui.transform, hideUI);
         }
 
-        public void Hide()
+        private Transform Hide()
         {
             if(_uiStack.Count != 0)
             {
                 _uiStack.Peek().uiState = UIState.HIDE;
+                return _uiStack.Peek().transform;
             }
+            return null;
         }
 
-        public void Back()
+        public Tuple<Transform, Transform> Back()
         {
             if (_uiStack.Count > 1)
             {
-                if (_uiStack.Peek().Layer == UILayer.BASIC_UI)
+                UIBase hideUI = _uiStack.Pop();
+                Transform showUI = null;
+                if (hideUI.Layer == UILayer.BASIC_UI)
                 {
-                    _uiStack.Pop().uiState = UIState.HIDE;
+                    hideUI.uiState = UIState.HIDE;
                     _uiStack.Peek().uiState = UIState.SHOW;
+                    showUI = _uiStack.Peek().transform;
                 }
                 else
                 {
-                    _uiStack.Pop().uiState = UIState.HIDE;
+                    hideUI.uiState = UIState.HIDE;
                 }
+                return new Tuple<Transform, Transform>(showUI, hideUI.transform);
             }
             else
             {
                 Debug.LogError("uistack has not more than one element");
+                return null;
             }
         }
 
-        public void InitUi(UIBase uiScript)
+        public void AddGetLayerObjectListener(Func<UILayer, Transform> fun)
+        {
+            if (fun == null)
+            {
+                Debug.LogError("GetLayerObject function can not be null");
+                return;
+            }
+            GetLayerObject = fun;
+        }
+
+        private void InitUi(UIBase uiScript)
         {
             if (uiScript.uiState == UIState.NORMAL)
             {
                 Transform ui = uiScript.transform;
-                ui.SetParent(_layerManager.GetLayerObject(uiScript.Layer));
+                ui.SetParent(GetLayerObject?.Invoke(uiScript.Layer));
                 ui.localPosition = Vector3.zero;
+                ui.localScale = Vector3.one;
             }
         }
 

@@ -51,12 +51,12 @@ namespace UIFrame
 
         protected virtual void Show()
         {
-            SetActive(true);
+            
         }
 
         protected virtual void Hide()
         {
-            SetActive(false);
+            
         }
 
         protected virtual void SetActive(bool active)
