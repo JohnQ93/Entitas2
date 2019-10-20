@@ -2,7 +2,7 @@ using UnityEngine;
 using Const;
 using System.Collections.Generic;
 using System;
-using System.Threading.Tasks;
+using Util;
 
 namespace UIFrame
 {
@@ -11,6 +11,7 @@ namespace UIFrame
         private readonly Dictionary<UiId, GameObject> _prefabDictionary = new Dictionary<UiId, GameObject>();
         private readonly Stack<UIBase> _uiStack = new Stack<UIBase>();
         private Func<UILayer, Transform> GetLayerObject;
+        private Action<Transform> InitCallBack;
 
         public Tuple<Transform, Transform> Show(UiId id)
         {
@@ -41,7 +42,7 @@ namespace UIFrame
             
             _uiStack.Push(uiScript);
 
-            return new Tuple<Transform, Transform>(ui.transform, hideUI);
+            return new Tuple<Transform, Transform>(ui.transform, hideUI);   //Item1:要显示的UI， Item2:要隐藏的UI
         }
 
         private Transform Hide()
@@ -79,6 +80,18 @@ namespace UIFrame
             }
         }
 
+        public List<Transform> GetDefaultBtnTrans(Transform showUI)
+        {
+            if(showUI != null)
+            {
+                return showUI.GetComponent<UIBase>().GetBtnParents();
+            }
+            else
+            {
+                return null;
+            }
+        }
+
         public void AddGetLayerObjectListener(Func<UILayer, Transform> fun)
         {
             if (fun == null)
@@ -89,17 +102,37 @@ namespace UIFrame
             GetLayerObject = fun;
         }
 
+        public void AddInitCallBackListener(Action<Transform> callBack)
+        {
+            if(callBack == null)
+            {
+                Debug.LogError("InitCallBack function can not be null");
+                return;
+            }
+            InitCallBack = callBack;
+        }
+
         private void InitUi(UIBase uiScript)
         {
             if (uiScript.uiState == UIState.NORMAL)
             {
+                Debug.Log("InitUi");
                 Transform ui = uiScript.transform;
                 ui.SetParent(GetLayerObject?.Invoke(uiScript.Layer));
                 ui.localPosition = Vector3.zero;
                 ui.localScale = Vector3.one;
+                ui.RectTransform().offsetMax = Vector2.zero;
+                ui.RectTransform().offsetMin = Vector2.zero;
+                
+                InitCallBack?.Invoke(ui);
             }
         }
 
+        /// <summary>
+        /// 加载要显示的UI预制体，如果加载过则从缓存中读取
+        /// </summary>
+        /// <param name="id">要加载的UiId</param>
+        /// <returns>UI GameObject</returns>
         private GameObject GetPrefabObject(UiId id)
         {
             if(!_prefabDictionary.ContainsKey(id) || _prefabDictionary[id] == null)
@@ -118,6 +151,12 @@ namespace UIFrame
             return _prefabDictionary[id];
         }
 
+        /// <summary>
+        /// 获取实例化UI上的脚本，如果没有则根据UiId添加对应的UIBase脚本
+        /// </summary>
+        /// <param name="prefab"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
         private UIBase GetUiScript(GameObject prefab, UiId id)
         {
             UIBase ui = prefab.GetComponent<UIBase>();

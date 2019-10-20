@@ -1,5 +1,6 @@
 using UnityEngine;
 using Const;
+using System.Collections.Generic;
 
 namespace UIFrame
 {
@@ -14,7 +15,10 @@ namespace UIFrame
         public  UIState uiState
         {
             get { return _uiState; }
-            set { HandleUIState(value); }
+            set { 
+                HandleUIState(value);
+                _uiState = value;
+            }
         }
 
         private void HandleUIState(UIState value)
@@ -65,5 +69,6 @@ namespace UIFrame
         }
 
         public abstract UiId GetUiId();
+        public abstract List<Transform> GetBtnParents();
     }
 }

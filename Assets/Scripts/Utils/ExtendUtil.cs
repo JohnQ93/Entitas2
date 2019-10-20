@@ -30,5 +30,35 @@ namespace Util
                 return null;
             }
         }
+
+        public static Image Image(this Transform transform)
+        {
+            var image = transform.GetComponent<Image>();
+
+            if (image != null)
+            {
+                return image;
+            }
+            else
+            {
+                Debug.LogError("can not find Image");
+                return null;
+            }
+        }
+
+        public static Button Button(this Transform transform)
+        {
+            var btn = transform.GetComponent<Button>();
+
+            if (btn != null)
+            {
+                return btn;
+            }
+            else
+            {
+                Debug.LogError("can not find Button");
+                return null;
+            }
+        }
     }
 }
