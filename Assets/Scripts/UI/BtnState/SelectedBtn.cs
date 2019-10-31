@@ -48,7 +48,6 @@ namespace UIFrame
 
         public void CancelSelected()
         {
-            Debug.Log("CancelEffect");
             KillEffect(transform);
         }
 

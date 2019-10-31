@@ -40,6 +40,7 @@ namespace UIFrame
 
         public void Show(Transform showUI)
         {
+            ResetBtnState();
             ResetData();
             _currentParents = showUI.GetComponentsInChildren<BtnParent>(true).ToList();
             SetDefaultBtn(_currentParents);
@@ -65,6 +66,14 @@ namespace UIFrame
         {
             _parentId = 0;
             _currentParents.Clear();
+        }
+
+        private void ResetBtnState()
+        {
+            foreach (BtnParent btnParent in _currentParents)
+            {
+                btnParent.ResetChild();
+            }
         }
 
         public void Left()

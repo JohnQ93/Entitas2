@@ -9,5 +9,10 @@ namespace UIFrame
         {
             return Resources.Load(path + name) as T;
         }
+
+        public T[] LoadAll<T>(string path) where T : Object
+        {
+            return Resources.LoadAll<T>(path);
+        }
     }
 }

@@ -21,7 +21,7 @@ namespace UIFrame
 
         public override UiEffect GetEffectLevel()
         {
-            return UiEffect.OTHERS_EFFECT;
+            return UiEffect.VIEW_EFFECT;
         }
     }
 }

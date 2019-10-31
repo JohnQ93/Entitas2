@@ -16,6 +16,11 @@ namespace UIFrame
                 RootManager.Instance.Back();
             }
 
+            if (Input.GetMouseButtonDown(0))
+            {
+                RootManager.Instance.PlayAudio(Const.UIAudioName.UI_click);
+            }
+
             BtnSelected();
         }
 

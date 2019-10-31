@@ -9,8 +9,6 @@ namespace UIFrame
     /// </summary>
     public abstract class UIBase : MonoBehaviour
     {
-        //当前UI的层级
-        public UILayer Layer { get; protected set; }
         private UIState _uiState = UIState.NORMAL;
         public  UIState uiState
         {
@@ -70,5 +68,6 @@ namespace UIFrame
 
         public abstract UiId GetUiId();
         public abstract List<Transform> GetBtnParents();
+        public abstract UILayer GetUiLayer();
     }
 }

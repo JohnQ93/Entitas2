@@ -30,7 +30,7 @@ namespace UIFrame
             InitUi(uiScript);
 
             Transform hideUI = null;
-            if (uiScript.Layer == UILayer.BASIC_UI)
+            if (uiScript.GetUiLayer() == UILayer.BASIC_UI)
             {
                 uiScript.uiState = UIState.SHOW;
                 hideUI = Hide();
@@ -61,7 +61,7 @@ namespace UIFrame
             {
                 UIBase hideUI = _uiStack.Pop();
                 Transform showUI = null;
-                if (hideUI.Layer == UILayer.BASIC_UI)
+                if (hideUI.GetUiLayer() == UILayer.BASIC_UI)
                 {
                     hideUI.uiState = UIState.HIDE;
                     _uiStack.Peek().uiState = UIState.SHOW;
@@ -78,6 +78,24 @@ namespace UIFrame
                 Debug.LogError("uistack has not more than one element");
                 return null;
             }
+        }
+
+        public Transform GetCurrentUiTrans()
+        {
+            return _uiStack.Peek().transform;
+        }
+
+        public Transform GetBasicUiTrans()
+        {
+            var array = _uiStack.ToArray();
+            for (int i = 0; i < array.Length; i++)
+            {
+                if(array[i].GetUiLayer() == UILayer.BASIC_UI)
+                {
+                    return array[i].transform;
+                }
+            }
+            return null;
         }
 
         public List<Transform> GetDefaultBtnTrans(Transform showUI)
@@ -118,7 +136,7 @@ namespace UIFrame
             {
                 Debug.Log("InitUi");
                 Transform ui = uiScript.transform;
-                ui.SetParent(GetLayerObject?.Invoke(uiScript.Layer));
+                ui.SetParent(GetLayerObject?.Invoke(uiScript.GetUiLayer()));
                 ui.localPosition = Vector3.zero;
                 ui.localScale = Vector3.one;
                 ui.RectTransform().offsetMax = Vector2.zero;
@@ -137,7 +155,7 @@ namespace UIFrame
         {
             if(!_prefabDictionary.ContainsKey(id) || _prefabDictionary[id] == null)
             {
-                GameObject prefab = LoadManager.Instance.Load<GameObject>(Path.UIPath, id.ToString());
+                GameObject prefab = LoadManager.Instance.Load<GameObject>(Path.UI_PATH, id.ToString());
                 if (prefab != null)
                 {
                     _prefabDictionary[id] = Instantiate(prefab);
