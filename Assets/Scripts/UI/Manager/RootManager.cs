@@ -1,6 +1,7 @@
 using Const;
 using UnityEngine;
 using System;
+using Manager;
 
 namespace UIFrame
 {

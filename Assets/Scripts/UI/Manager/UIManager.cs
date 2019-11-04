@@ -3,6 +3,7 @@ using Const;
 using System.Collections.Generic;
 using System;
 using Util;
+using Manager;
 
 namespace UIFrame
 {

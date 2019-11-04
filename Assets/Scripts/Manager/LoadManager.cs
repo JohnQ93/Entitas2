@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace UIFrame
+namespace Manager
 {
     public class LoadManager
     {

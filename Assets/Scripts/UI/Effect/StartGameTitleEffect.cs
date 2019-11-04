@@ -10,7 +10,7 @@ namespace UIFrame
         public override void Enter()
         {
             base.Enter();
-            transform.RectTransform().DOAnchorPosX(-960, 1);
+            transform.RectTransform().DOAnchorPosX(0, 1);
         }
 
         public override void Exit()
