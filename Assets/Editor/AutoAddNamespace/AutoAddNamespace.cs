@@ -9,31 +9,31 @@ namespace CustomTool
     public class AutoAddNamespace : UnityEditor.AssetModificationProcessor
     {
 
-        //private static void OnWillCreateAsset(string path)
-        //{
-        //    path = path.Replace(".meta", ""); //path是资源的meta文件路径
-        //    if (path.EndsWith(".cs"))  //判断是否是创建的脚本文件.cs
-        //    {
-        //        StringBuilder stringBuilder = new StringBuilder();
-        //        using (StreamReader sr = new StreamReader(path))
-        //        {
-        //            string text = sr.ReadToEnd();
-        //            stringBuilder.Append(text);
-        //        }
-                
-        //        using (StreamWriter sw = new StreamWriter(path))
-        //        {
-        //            string name = GetClassName(stringBuilder.ToString());
-        //            if (string.IsNullOrEmpty(name))
-        //            {
-        //                return;
-        //            }
-        //            var newText = GetScriptContext(name);
-        //            sw.Write(newText);
-        //        }
-        //    }
-        //    AssetDatabase.Refresh();
-        //}
+        private static void OnWillCreateAsset(string path)
+        {
+            path = path.Replace(".meta", ""); //path是资源的meta文件路径
+            if (path.EndsWith(".cs"))  //判断是否是创建的脚本文件.cs
+            {
+                StringBuilder stringBuilder = new StringBuilder();
+                using (StreamReader sr = new StreamReader(path))
+                {
+                    string text = sr.ReadToEnd();
+                    stringBuilder.Append(text);
+                }
+
+                using (StreamWriter sw = new StreamWriter(path))
+                {
+                    string name = GetClassName(stringBuilder.ToString());
+                    if (string.IsNullOrEmpty(name))
+                    {
+                        return;
+                    }
+                    var newText = GetScriptContext(name);
+                    sw.Write(newText);
+                }
+            }
+            AssetDatabase.Refresh();
+        }
 
         //更新脚本内容为新的类名 
         private static string GetScriptContext(string className)
