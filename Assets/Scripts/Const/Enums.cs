@@ -53,11 +53,23 @@ namespace Const
         UI_out
     }
 
+    public enum BgAudioName
+    {
+        Level_Bg
+    }
+
     public enum DifficultLevel
     {
         NONE,
         EASY,
         NORMAL,
         HARD
+    }
+
+    public enum ComicsParentId
+    {
+        LeftComics,
+        CurrentComics,
+        RightComics
     }
 }

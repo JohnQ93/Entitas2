@@ -30,7 +30,7 @@ namespace UIFrame
                 var list = _uiManager.GetDefaultBtnTrans(uiTrans);
                 _btnManager.InitBtnParent(list);
             });
-            _audioManager.Init(Path.UI_AUDIO_PATH, LoadManager.Instance.LoadAll<AudioClip>);
+            _audioManager.Init(Path.UI_AUDIO_PATH, LoadManager.Single.LoadAll<AudioClip>);
             _audioManager.PlayBg(UIAudioName.UI_bg.ToString());
         }
         private void Start()

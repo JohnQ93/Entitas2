@@ -2,6 +2,7 @@
 using System.Text.RegularExpressions;
 using UnityEngine;
 using System.Text;
+using UnityEditor;
 
 namespace CustomTool
 {
@@ -26,6 +27,7 @@ namespace CustomTool
                     sw.Write(newText);
                 }
             }
+            AssetDatabase.Refresh();
         }
 
         //更新脚本内容为新的类名 

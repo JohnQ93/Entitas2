@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace UIFrame
 {
-    public class LoadingView : BasicUI
+    public class LoadingView : OverlayUI
     {
         public override List<Transform> GetBtnParents()
         {
@@ -22,6 +22,7 @@ namespace UIFrame
             base.Show();
             StartCoroutine(LoadSceneManager.Single.LoadSceneAsync(DataManager.Single.GetSceneName()));
             LoadSceneManager.Single.AllowSwitchScene();
+            transform.SetAsLastSibling();
         }
     }
 }
