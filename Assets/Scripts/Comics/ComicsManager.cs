@@ -102,7 +102,11 @@ namespace UIFrame
             transform.AddBtnListener("Back", Back);
             transform.AddBtnListener("Left", LeftBtn);
             transform.AddBtnListener("Right", RightBtn);
-            transform.AddBtnListener("Done", () => { });
+            transform.AddBtnListener("Done", () => 
+            {
+                StartCoroutine(LoadSceneManager.Single.LoadSceneAsync(DataManager.Single.GetSceneName()));
+                LoadSceneManager.Single.AllowSwitchScene();
+            });
         }
 
         private ComicsItem GetCurrentItem()

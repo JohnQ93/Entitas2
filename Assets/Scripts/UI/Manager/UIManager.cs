@@ -135,7 +135,6 @@ namespace UIFrame
         {
             if (uiScript.uiState == UIState.NORMAL)
             {
-                Debug.Log("InitUi");
                 Transform ui = uiScript.transform;
                 ui.SetParent(GetLayerObject?.Invoke(uiScript.GetUiLayer()));
                 ui.localPosition = Vector3.zero;
