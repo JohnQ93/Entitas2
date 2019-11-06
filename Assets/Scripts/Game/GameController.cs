@@ -1,7 +1,7 @@
 using UnityEngine;
 using Entitas;
 
-namespace Game
+namespace Samurai
 {
     public class GameController : MonoBehaviour
     {

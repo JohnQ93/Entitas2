@@ -11,4 +11,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4228ebb45665f4d48ab35c2b056915ce, type: 3}
   m_Name: NamespaceData
   m_EditorClassIdentifier: 
-  name: Game
+  name: Samurai
